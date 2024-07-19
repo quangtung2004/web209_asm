@@ -1,5 +1,6 @@
 import {
   Button,
+  CardMedia,
   Container,
   Paper,
   Stack,
@@ -74,7 +75,6 @@ const ListProduct = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>ID</TableCell>
                   <TableCell align="right">Title</TableCell>
                   <TableCell align="right">Price</TableCell>
                   <TableCell align="right">Description</TableCell>
@@ -89,11 +89,18 @@ const ListProduct = () => {
                     key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell>{product._id}</TableCell>
                     <TableCell align="right">{product.title}</TableCell>
                     <TableCell align="right">{product.price}</TableCell>
                     <TableCell align="right">{product.description}</TableCell>
-                    <TableCell align="right">{product.image}</TableCell>
+                    <TableCell align="right">
+                      <CardMedia
+                        component="img"
+                        alt={product.title}
+                        height="140"
+                        image={product.image}
+                        sx={{ objectFit: "cover" }}
+                      />
+                    </TableCell>
                     <TableCell align="right">
                       {product.category?.name}
                     </TableCell>
@@ -103,7 +110,7 @@ const ListProduct = () => {
                         gap={3}
                         justifyContent={"center"}
                       >
-                        <Link to={""}>
+                        <Link to={`/admin/products/edit/${product._id}`}>
                           <Button>Edit</Button>
                         </Link>
                         <Button

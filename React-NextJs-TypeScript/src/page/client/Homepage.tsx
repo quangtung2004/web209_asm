@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Stack } from '@mui/material';
+import { Container, Grid, Stack } from '@mui/material';
 import axios from 'axios';
 import Loading from 'src/component/Loading';
 import ProductCard from 'src/component/ProductCard';
@@ -32,19 +32,16 @@ const Homepage = () => {
     //render Ui : map
     return (
       <>
-      <Loading isShow={loading}/>
-      <Stack
-          direction={"row"}
-          flexWrap={"wrap"}
-          alignItems={"center"}
-          justifyContent={"center"}
-          gap={3} // 24px
-          sx={{ marginTop: 10 }}
-        >
-          {products.map((product, index) => (
-            <ProductCard key={index} product={product} />
+      <Loading isShow={loading} />
+      <Container sx={{ marginTop: 10 }}>
+        <Grid container spacing={4}>
+          {products.map((product) => (
+            <Grid item xs={12} sm={6} md={4} lg={2.4} key={product._id}>
+              <ProductCard product={product} />
+            </Grid>
           ))}
-        </Stack>
+        </Grid>
+      </Container>
       </>
     );
 }

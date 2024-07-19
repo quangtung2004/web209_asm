@@ -15,22 +15,38 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const nav = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const menuItems = [{text:"Home", link:"/"},
-    {text:"Products", link:"/"},
-    {text:"About", link:"/"},
-    {text:"Contact", link:"/"},
-    {text:"Login", link:"/login"},
-    {text:"Register", link:"/register"}];
+  const menuItems = [
+    { text: "Home", link: "/" },
+    { text: "Products", link: "/products" },
+    { text: "About", link: "/about" },
+    { text: "Contact", link: "/contact" },
+  ];
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    nav("/");
+  };
 
   return (
     <>
@@ -42,18 +58,15 @@ const Header = () => {
             aria-label="menu"
             sx={{ mr: 2 }}
             onClick={handleDrawerToggle}
-          ></IconButton>
+          >
+            <MenuIcon />
+          </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Your Store
           </Typography>
 
           <Hidden mdUp>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="search"
-              color="inherit"
-            >
+            <IconButton size="large" edge="end" aria-label="search" color="inherit">
               <SearchIcon />
             </IconButton>
           </Hidden>
@@ -67,13 +80,27 @@ const Header = () => {
                 exact
                 activeStyle={{
                   fontWeight: "bold",
-                  color: "red", // Thay đổi màu sắc hoặc style tại đây
+                  color: "red",
                 }}
                 sx={{ ml: 2 }}
               >
                 {item.text}
               </Button>
             ))}
+            {!isLoggedIn ? (
+              <>
+                <Button color="inherit" component={NavLink} to="/login" sx={{ ml: 2 }}>
+                  Login
+                </Button>
+                <Button color="inherit" component={NavLink} to="/register" sx={{ ml: 2 }}>
+                  Register
+                </Button>
+              </>
+            ) : (
+              <Button color="inherit" onClick={handleLogout} sx={{ ml: 2 }}>
+                Logout
+              </Button>
+            )}
           </Hidden>
           <Hidden mdUp>
             <IconButton
@@ -126,6 +153,20 @@ const Header = () => {
                 <ListItemText primary={item.text} />
               </ListItem>
             ))}
+            {!isLoggedIn ? (
+              <>
+                <ListItem button component={NavLink} to="/login">
+                  <ListItemText primary="Login" />
+                </ListItem>
+                <ListItem button component={NavLink} to="/register">
+                  <ListItemText primary="Register" />
+                </ListItem>
+              </>
+            ) : (
+              <ListItem button onClick={handleLogout}>
+                <ListItemText primary="Logout" />
+              </ListItem>
+            )}
           </List>
           <Divider />
         </Box>

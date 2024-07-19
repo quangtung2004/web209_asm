@@ -5,6 +5,7 @@ import { Field, Form } from "react-final-form";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "src/component/element/InputText";
 import { MIN_PASSWORD } from "src/const";
+import { useFlash } from "src/contexts/Flash";
 
 import isEmail from "validator/lib/isEmail";
 
@@ -16,6 +17,7 @@ type LoginFormParams = {
 
 const Login = () => {
   const nav = useNavigate();
+  const { setFlash } = useFlash();
   const validate = (values: LoginFormParams) => {
     const { email, password } = values;
     const errors: ValidationErrors = {};
@@ -32,7 +34,7 @@ const Login = () => {
       const { data } = await axios.post("/auth/login", values);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user)); // luu object
-      alert("thành công");
+      setFlash(true);
       nav("/");
     } catch (error) {
       console.log(error);
@@ -40,7 +42,7 @@ const Login = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ marginTop: 15 }}>
       <Typography variant="h2" textAlign={"center"} mb={2}>
         Login
       </Typography>

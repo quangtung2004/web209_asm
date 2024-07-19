@@ -27,16 +27,16 @@ export default function ConfirmDialog({
   };
 
   return (
-    <Dialog
+    <CustomDialog
       open={confirm}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{"Xóa sản phẩm"}</DialogTitle>
+      <CustomDialogTitle id="alert-dialog-title">Xóa sản phẩm</CustomDialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Bạn có chắc chắn xóa sản phẩm này ?
+          Bạn có chắc chắn xóa sản phẩm này?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -45,11 +45,26 @@ export default function ConfirmDialog({
           OK
         </ButtonOk>
       </DialogActions>
-    </Dialog>
+    </CustomDialog>
   );
 }
 
-const ButtonOk = styled(Button)({
+const CustomDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialog-paper": {
+    borderRadius: 15,
+    padding: theme.spacing(2),
+    minWidth: 400,
+  },
+}));
+
+const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
+  fontSize: 20,
+  fontWeight: "bold",
+  textAlign: "center",
+  color: theme.palette.primary.main,
+}));
+
+const ButtonOk = styled(Button)(({ theme }) => ({
   background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
   border: 0,
   borderRadius: 10,
@@ -57,15 +72,20 @@ const ButtonOk = styled(Button)({
   color: "white",
   height: 48,
   padding: "0 20px",
-});
+  "&:hover": {
+    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    opacity: 0.9,
+  },
+}));
 
-const ButtonCancel = styled(Button)(
-  () => `
-  background-color: #000;
-  color: #fff;
-  &:hover {
-    background-color: #000;
-    opacity: 0.6;
-  }
-  `
-);
+const ButtonCancel = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[700],
+  color: "#fff",
+  borderRadius: 10,
+  height: 48,
+  padding: "0 20px",
+  "&:hover": {
+    backgroundColor: theme.palette.grey[900],
+    opacity: 0.8,
+  },
+}));

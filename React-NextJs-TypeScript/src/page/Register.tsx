@@ -5,11 +5,14 @@ import { Field, Form } from "react-final-form";
 import { useNavigate } from "react-router-dom";
 import { MIN_PASSWORD } from "src/const";
 import isEmail from "validator/lib/isEmail";
-import { InputText } from "./element/InputText";
+
 import { User } from "src/type/User";
+import { InputText } from "src/component/element/InputText";
+import { useFlash } from "src/contexts/Flash";
 
 const Register = () => {
   const nav = useNavigate();
+  const { setFlash } = useFlash();
   const validate = (values: User) => {
     const { username, email, password } = values;
     const errors: ValidationErrors = {};
@@ -26,7 +29,7 @@ const Register = () => {
     try {
       console.log(data);
       await axios.post("/auth/register", data);
-      alert("Thành công");
+      setFlash(true);
       nav("/login");
     } catch (error) {
       console.log(error);
@@ -34,7 +37,7 @@ const Register = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ marginTop: 15 }}>
       <Typography variant="h2" textAlign={"center"} mb={2}>
         Register
       </Typography>
